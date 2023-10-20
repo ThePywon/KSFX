@@ -1,0 +1,16 @@
+{
+  "sound_packs": [{
+    "name": "assets",
+    "pitch_start": 0.5,
+    "pitch_range": 0.5,
+    "pitch_steps": 0.005
+  }],
+  "previous_sound_pack": ["F4"],
+  "next_sound_pack": ["F5"],
+  "terminate": ["F2"],
+  "toggle": ["F3"],
+  "pitch_start": 0.5,
+  "pitch_range": 0.5,
+  "pitch_steps": 0.005,
+  "fast_threshold": 1.0
+}
