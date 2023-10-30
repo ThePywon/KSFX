@@ -1,6 +1,6 @@
 {
   "sound_packs": [{
-    "name": "assets",
+    "path": "assets",
     "pitch_start": 0.5,
     "pitch_range": 0.5,
     "pitch_steps": 0.005
