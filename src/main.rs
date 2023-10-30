@@ -12,7 +12,7 @@ use rand::random;
 pub enum SoundPackSettings {
   Basic(String),
   Advanced {
-    name: String,
+    path: String,
     volume: Option<f32>,
     pitch_start: Option<f32>,
     pitch_range: Option<f32>,
@@ -24,9 +24,9 @@ pub enum SoundPackSettings {
 fn get_path(settings: &SoundPackSettings) -> &String {
   match settings {
     SoundPackSettings::Basic(path) => return path,
-    SoundPackSettings::Advanced { name, volume: _,
+    SoundPackSettings::Advanced { path, volume: _,
       pitch_start: _, pitch_range: _, pitch_steps: _,
-      fast_threshold: _ } => return name
+      fast_threshold: _ } => return path
   }
 }
 
@@ -186,7 +186,7 @@ fn main() {
       let (volume, pitch_start,
         pitch_range, pitch_steps, fast_threshold);
       match settings.sound_packs[current_sound_pack] {
-        SoundPackSettings::Advanced { name: _, volume: a, pitch_start: b,
+        SoundPackSettings::Advanced { path: _, volume: a, pitch_start: b,
           pitch_range: c, pitch_steps: d, fast_threshold: e } => {
             volume = a.unwrap_or(settings.volume.unwrap_or(1.0));
             pitch_start = b.unwrap_or(settings.pitch_start.unwrap_or(0.5));
