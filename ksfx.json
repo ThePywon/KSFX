@@ -1,16 +1,7 @@
 {
-  "sound_packs": [{
-    "path": "assets",
-    "pitch_start": 0.5,
-    "pitch_range": 0.5,
-    "pitch_steps": 0.005
-  }],
-  "previous_sound_pack": ["F4"],
-  "next_sound_pack": ["F5"],
+  "sound_packs": ["assets"],
+  "previous_sound_pack": ["F9"],
+  "next_sound_pack": ["F10"],
   "terminate": ["F2"],
-  "toggle": ["F3"],
-  "pitch_start": 0.5,
-  "pitch_range": 0.5,
-  "pitch_steps": 0.005,
-  "fast_threshold": 1.0
+  "toggle": ["F3"]
 }

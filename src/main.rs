@@ -17,7 +17,9 @@ pub enum SoundPackSettings {
     pitch_start: Option<f32>,
     pitch_range: Option<f32>,
     pitch_steps: Option<f32>,
-    fast_threshold: Option<f32>
+    fast_threshold: Option<f32>,
+    randomize: Option<bool>,
+    random_range: Option<f32>
   }
 }
 
@@ -26,7 +28,7 @@ fn get_path(settings: &SoundPackSettings) -> &String {
     SoundPackSettings::Basic(path) => return path,
     SoundPackSettings::Advanced { path, volume: _,
       pitch_start: _, pitch_range: _, pitch_steps: _,
-      fast_threshold: _ } => return path
+      fast_threshold: _, randomize: _, random_range: _ } => return path
   }
 }
 
@@ -51,7 +53,9 @@ pub struct Settings {
   pitch_start: Option<f32>,
   pitch_range: Option<f32>,
   pitch_steps: Option<f32>,
-  fast_threshold: Option<f32>
+  fast_threshold: Option<f32>,
+  randomize: Option<bool>,
+  random_range: Option<f32>
 }
 
 fn main() {
@@ -85,15 +89,17 @@ fn main() {
     serialized_config = String::from(
 "{
   \"sound_packs\": [\"assets\"],
-  \"previous_sound_pack\": [\"F4\"],
-  \"next_sound_pack\": [\"F5\"],
+  \"previous_sound_pack\": [\"F9\"],
+  \"next_sound_pack\": [\"F10\"],
   \"terminate\": [\"F2\"],
   \"toggle\": [\"F3\"],
   \"volume\": 1.0,
   \"pitch_start\": 0.5,
   \"pitch_range\": 0.5,
   \"pitch_steps\": 0.005,
-  \"fast_threshold\": 1.0
+  \"fast_threshold\": 1.0,
+  \"randomize\": false,
+  \"random_range\": 0.01
 }"
     );
     let file = File::create(&config_path);
@@ -105,12 +111,13 @@ fn main() {
       println!("Could not create config file in local directory!");
     }
     settings = Settings { sound_packs: vec![SoundPackSettings::Basic(String::from("assets"))],
-      previous_sound_pack: Some(vec![String::from("F4")]),
-      next_sound_pack: Some(vec![String::from("F5")]),
+      previous_sound_pack: Some(vec![String::from("F9")]),
+      next_sound_pack: Some(vec![String::from("F10")]),
       terminate: Some(vec![String::from("F2")]),
       toggle: Some(vec![String::from("F3")]), volume: Some(1.0),
       pitch_start: Some(0.5), pitch_range: Some(0.5),
-      pitch_steps: Some(0.005), fast_threshold: Some(1.0) };
+      pitch_steps: Some(0.005), fast_threshold: Some(1.0),
+      randomize: Some(false), random_range: Some(0.01) };
   }
 
 
@@ -183,16 +190,19 @@ fn main() {
 
     if keys.len() > previous_key_amt {
       let selection = random::<f32>() * sound_packs[current_sound_pack].len() as f32;
-      let (volume, pitch_start,
-        pitch_range, pitch_steps, fast_threshold);
+      let (volume, pitch_start, pitch_range, pitch_steps,
+        fast_threshold, randomize, random_range);
       match settings.sound_packs[current_sound_pack] {
         SoundPackSettings::Advanced { path: _, volume: a, pitch_start: b,
-          pitch_range: c, pitch_steps: d, fast_threshold: e } => {
+          pitch_range: c, pitch_steps: d, fast_threshold: e,
+          randomize: f, random_range: g } => {
             volume = a.unwrap_or(settings.volume.unwrap_or(1.0));
             pitch_start = b.unwrap_or(settings.pitch_start.unwrap_or(0.5));
             pitch_range = c.unwrap_or(settings.pitch_range.unwrap_or(0.5));
             pitch_steps = d.unwrap_or(settings.pitch_steps.unwrap_or(0.005));
             fast_threshold = e.unwrap_or(settings.fast_threshold.unwrap_or(1.0));
+            randomize = f.unwrap_or(settings.randomize.unwrap_or(false));
+            random_range = g.unwrap_or(settings.random_range.unwrap_or(0.05));
           }
         SoundPackSettings::Basic(_) => {
           volume = settings.volume.unwrap_or(1.0);
@@ -200,6 +210,8 @@ fn main() {
           pitch_range = settings.pitch_range.unwrap_or(0.5);
           pitch_steps = settings.pitch_steps.unwrap_or(0.005);
           fast_threshold = settings.fast_threshold.unwrap_or(1.0);
+          randomize = settings.randomize.unwrap_or(false);
+          random_range = settings.random_range.unwrap_or(0.05);
         }
       }
 
@@ -209,6 +221,11 @@ fn main() {
       }
       else if !fast {
         pitch = pitch_start;
+      }
+
+      if randomize {
+        let min_pitch = pitch - random_range;
+        pitch = min_pitch + random::<f32>() * random_range * 2.0;
       }
 
       last_press = Instant::now();
