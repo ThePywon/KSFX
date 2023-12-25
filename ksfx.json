@@ -1,5 +1,8 @@
 {
-  "sound_packs": ["assets"],
+  "sound_packs": ["main", {
+    "path": "test",
+    "pitch_start": 1.0
+  }],
   "previous_sound_pack": ["F9"],
   "next_sound_pack": ["F10"],
   "terminate": ["F2"],
