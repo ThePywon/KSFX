@@ -158,7 +158,7 @@ fn main() {
         keybind.iter().all(|x| key_names.contains(x)) {
           toggled = true;
           active = !active;
-          println!("Toggled keyboard sound effects.");
+          println!("Toggled keyboard sound effects {}.", if active {"ON"} else {"OFF"});
       }
     }
     if keys.len() == 0 { toggled = false; switched_pack = false; }
@@ -167,7 +167,7 @@ fn main() {
         keybind.iter().all(|x| key_names.contains(x)) {
           switched_pack = true;
           if current_sound_pack == 0 {
-            current_sound_pack = sound_packs.len();
+            current_sound_pack = sound_packs.len() - 1;
           }
           else {
             current_sound_pack -= 1;

@@ -1,7 +1,0 @@
-{
-  "sound_packs": ["assets"],
-  "previous_sound_pack": ["F9"],
-  "next_sound_pack": ["F10"],
-  "terminate": ["F2"],
-  "toggle": ["F3"]
-}
